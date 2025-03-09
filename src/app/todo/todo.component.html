@@ -1,0 +1,51 @@
+<div class="todo-container">
+    <h1 class="title">
+      <mat-icon class="title-icon">check_circle</mat-icon> To-Do List
+    </h1>
+  
+    <div class="task-input">
+      <mat-form-field class="full-width">
+        <input matInput [(ngModel)]="newTodoTitle" placeholder="Add a new task..." />
+      </mat-form-field>
+      <button mat-fab color="primary" (click)="addTodo()">
+        <mat-icon>add</mat-icon>a
+      </button>
+    </div>
+  
+    <mat-divider></mat-divider>
+  
+    <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let todo of todos" class="todo-item">
+          
+          <!-- ✅ Fix: Properly Toggle Checkbox -->
+          <mat-checkbox [checked]="todo.completed" (change)="toggleCompletion(todo)">
+          </mat-checkbox>
+      
+          <!-- Edit Mode (Disable Editing for Completed Tasks) -->
+          <ng-container *ngIf="editingTodo?.id === todo.id; else displayMode">
+            <mat-form-field appearance="outline" class="edit-field">
+              <input matInput [(ngModel)]="editTitle" />
+            </mat-form-field>
+            <button mat-button color="primary" (click)="saveTodo()">Save</button>
+          </ng-container>
+      
+          <!-- Display Mode -->
+          <ng-template #displayMode>
+            <span class="task-title" [class.completed]="todo.completed">
+              {{ todo.title }}
+            </span>
+            <button mat-icon-button color="accent" (click)="editTodo(todo)" [disabled]="todo.completed">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </ng-template>
+      
+          <!-- Delete Button (Disabled if Completed) -->
+          <button mat-icon-button color="warn" (click)="deleteTodo(todo.id)" [disabled]="todo.completed">
+            <mat-icon>delete</mat-icon>
+          </button>
+      
+        </mat-list-item>
+      </mat-list>
+      
+  </div>
+  
